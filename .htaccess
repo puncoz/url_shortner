@@ -1,0 +1,39 @@
+## Set up mod_rewrite
+<IfModule mod_rewrite.c>
+Options +MultiViews +FollowSymLinks
+DirectoryIndex index.php index.html
+
+# Enable Rewrite Engine
+# ------------------------------
+RewriteEngine On
+
+# UPDATE THIS TO POINT TO where you installed this FROM YOUR DOC ROOT.
+# If this is in the DOC ROOT, leave it as it is
+#---------------------
+RewriteBase /github_projects/url_shortner/url_shortner/
+
+# In case your hosting service doesn't add or remove 'www.' for you, you can
+# do it here by uncommenting and updating the 'Rewrite*'s below.
+#
+# Add or remove 'www.'  Whichever you prefer.  
+# This one removes the 'www.' which seems to be the favorable choice these days. 
+# ------------------------------
+#RewriteCond %{HTTP_HOST} ^www.<sitename>.com
+#RewriteRule (.*) http://<sitename>.com/$1 [R=301,L]
+
+# Redirect index.php Requests
+# ------------------------------
+RewriteCond %{THE_REQUEST} ^GET.*index\.php [NC]
+RewriteCond %{THE_REQUEST} !/system/.*
+RewriteRule (.*?)index\.php/*(.*) $1$2 [R=301,L]
+
+# Standard ExpressionEngine Rewrite
+# ------------------------------
+RewriteRule modules/(.+)/controllers/(.+)\.php$ /index.php?/$1/$2 [L,R=301]
+RewriteRule controllers/(.+)\.php$ /index.php?/$1 [L,R=301]
+
+RewriteCond $1 !\.(css|js|gif|jpe?g|png) [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
