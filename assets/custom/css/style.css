@@ -1,0 +1,53 @@
+/*****************************************
+ *	GENERAL STYLE
+ *****************************************/
+html {
+	position: relative;
+	min-height: 99%;
+}
+
+body {
+	padding-top: 50px;
+	/* Margin bottom by footer height */
+  	margin-bottom: 60px;
+}
+.text-centered {
+	text-align: center;
+}
+.alert-success {
+	border-color: #92C962;
+}
+
+/*****************************************
+ *	MAIN CONTENT
+ *****************************************/
+#main_content {
+ 	padding: 40px 15px;
+ }
+
+#main_content form {
+	border: 1px solid #E2E2E2;
+	padding: 10px;
+	margin: 10px;
+}
+
+/*****************************************
+ *	FOOTER
+ *****************************************/
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: #f5f5f5;
+	border-top: 1px solid #C4C4C4;
+}
+footer .container {
+	width: auto;
+	max-width: 680px;
+	padding: 0 15px;
+}
+footer .container p {
+	margin: 20px 0;
+}
