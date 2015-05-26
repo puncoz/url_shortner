@@ -12,12 +12,6 @@ class Home extends CI_Controller {
 	var $data = array();
 
 	/*
-	 *	Pagination per page
-	 *	No. of content to be displayed per page of pagination
-	 */
-	var $pagination_per_page = 10;
-
-	/*
 	 *	Constructor
 	 */
 	public function __construct() {
@@ -40,8 +34,7 @@ class Home extends CI_Controller {
 
 	public function shorten_url() {
 		if ($this->input->is_ajax_request()) {
-			$long_url = $this->input->post('long_url');
-
+			$long_url = trim($this->input->post('long_url'), '/');
 			try {
 				// checking for blank url
 				if(empty($long_url)) {
@@ -59,14 +52,17 @@ class Home extends CI_Controller {
 				}
 
 				// checking for url in database
-				$short_url = $this->shorten_model->checkUrlInDb($long_url);
-				if ($short_url === FALSE) {
-					$short_url = $this->shorten_model->createShortUrl($long_url);
+				$short_code = $this->shorten_model->checkUrlInDb($long_url);
+				if ($short_code === FALSE) {
+					$short_code = $this->shorten_model->createShortUrl($long_url);
+					if ($short_code  === FALSE) {
+						throw new Exception('Error on converting long URL to short. Please contact to web-master.');
+					}
 				}
-
-				echo json_encode(array('status_code' => '200', 'status_msg' => 'Success' ,'short_url'=> $long_url));			
+				
+				echo json_encode(array('status_code' => '200', 'status_msg' => 'Success' ,'short_url'=> base_url().$short_code, 'csrf_token_name'=>$this->security->get_csrf_token_name(), 'csrf_token'=>$this->security->get_csrf_hash()));			
 			} catch(Exception $e) {
-				echo json_encode(array('status_code' => '400', 'status_msg' => $e->getMessage()));
+				echo json_encode(array('status_code' => '400', 'status_msg' => $e->getMessage(), 'csrf_token_name'=>$this->security->get_csrf_token_name(), 'csrf_token'=>$this->security->get_csrf_hash()));
 			}
 		} else {
 			exit('No direct script access allowed');

@@ -41,13 +41,16 @@ $(document).ready(function(){
 				$("#status_alert_box").html(' ');
 				var data = jQuery.parseJSON( response_data );
 				if (data.status_code == "200") {
-					status_success_box = status_success_box.replace('{converted_url}', data.short_url);
-                    $("#status_alert_box").html(status_success_box);
+					status_success_box_new = status_success_box.replace('{converted_url}', data.short_url);
+                    $("#status_alert_box").html(status_success_box_new);
                 } else {
                     console.debug(data.status_msg);
-                    status_error_box = status_error_box.replace('{error_msg}', data.status_msg);
-                    $("#status_alert_box").html(status_error_box);
+                    status_error_box_new = status_error_box.replace('{error_msg}', data.status_msg);
+                    $("#status_alert_box").html(status_error_box_new);
                 };
+
+                // replacing the old csrf token
+                $("input[name='"+data.csrf_token_name+"']").val(data.csrf_token);
 			},
 			error: function(jqXhr, textStatus, errorThrown) {
 				console.debug(errorThrown);
