@@ -17,6 +17,9 @@ body {
 .alert-success {
 	border-color: #92C962;
 }
+.alert-info {
+	border-color: #ABDCF2;
+}
 
 /*****************************************
  *	MAIN CONTENT

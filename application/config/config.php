@@ -509,7 +509,6 @@ $config['proxy_ips'] = '';
 | directory.
 |
 */
-
 $config['modules_locations'] = array(
         APPPATH.'modules/' => '../modules/',
     );
