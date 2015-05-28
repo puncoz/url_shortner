@@ -18,22 +18,31 @@ class Shorten_model extends CI_model {
 	/*
 	 *	Characters to be used in shorted url code
 	 */
-	private static $chars = 'abcdefghjkmnpqrstwxyz123456789ABCDEFGHJKLMNPQRSTWXYZ';
+	private static $valid_chars = 'abcdefghjkmnpqrstwxyz123456789ABCDEFGHJKLMNPQRSTWXYZ';
 
 	/*
 	 *	Whether to insert short code in database or not	
 	 */
 	private static $insertShortCodeInDB = TRUE;
+
+	/*
+	 *	Whether to keep hit count in database or not
+	 */
+	private static $hitCountIncrement = TRUE;
 	
 	function __construct() {
 		// some thing while instantiated
 	}
 
+	/*******************************************
+	 *	ENCODE SHORT CODE
+	 *******************************************/
 	public function validateUrlFormat($url = '') {
 		if ($url == '') {
 			return FALSE;
 		}
-		return filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
+		//return filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
+		return preg_match('|^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$|', $url);
 	}
 
 	public function checkUrlExists($url = '') {
@@ -47,14 +56,15 @@ class Shorten_model extends CI_model {
 		}
 		
 		$ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch,  CURLOPT_RETURNTRANSFER, true);
-        curl_exec($ch);
-        $response = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch,  CURLOPT_RETURNTRANSFER, TRUE);
+	    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		$response = curl_exec($ch);
+		$response_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
  
-        return (!empty($response) && $response != 404);
+        return (!empty($response_status) && $response_status != '404');
 	}
 
 	public function checkUrlInDb($url = '') {
@@ -117,7 +127,7 @@ class Shorten_model extends CI_model {
 		return $this->db->delete(self::$db_tblname,array('LONG_URL'=>$url));
 	}
 
-	public function convertIdToShortCode($id) {
+	public function convertIdToShortCode($id = '') {
 		if ($id == '' || empty($id)) {
 			return FALSE;
 		}
@@ -127,7 +137,7 @@ class Shorten_model extends CI_model {
             return FALSE;
         }
  
-        $length = strlen(self::$chars);
+        $length = strlen(self::$valid_chars);
         // make sure length of available characters is at
         // least a reasonable minimum - there should be at
         // least 10 characters
@@ -135,21 +145,60 @@ class Shorten_model extends CI_model {
             throw new Exception("Length of chars is too small");
         }
  
-        $code = "";
+        $code = '';
+        //$id *= 138 * time();
+        $id = time();
+        //echo $id.'/';
         while ($id > $length - 1) {
             // determine the value of the next higher character
             // in the short code should be and prepend
-            $code = self::$chars[fmod($id, $length)] .
-                $code;
+            //echo 'l='.$length.'/';
+            //echo bcmod($id,$length).'/';
+            // echo self::$valid_chars[(int)($id%$length)];
+            $code .= self::$valid_chars[bcmod($id,$length)];
             // reset $id to remaining value to be converted
             $id = floor($id / $length);
         }
  
         // remaining value of $id is less than the length of
-        // self::$chars
-        $code = self::$chars[$id] . $code;
+        // self::$valid_chars
+        $code .= self::$valid_chars[(int)$id];
  
         return $code;
+	}
+
+	/*******************************************
+	 *	DECODE SHORT CODE
+	 *******************************************/
+	public function checkShortCodeFormat($short_code = '') {
+		if ($short_code == '' || empty($short_code)) {
+			return FALSE;
+		}
+		return preg_match("|[" . self::$valid_chars . "]+|", $short_code);
+	}
+
+	public function getLongUrlFromDB($short_code = '') {
+		if ($short_code == '' || empty($short_code)) {
+			return FALSE;
+		}
+
+		$this->db->select('ID,LONG_URL,HIT_COUNTER');
+		$query = $this->db->get_where(self::$db_tblname, array('SHORT_CODE'=>$short_code));
+		if ($query->num_rows() > 0) {
+			$result = $query->row();
+			if (self:: $hitCountIncrement) {
+				// increment hit count
+				$this->db->update(self::$db_tblname, array('HIT_COUNTER'=>($result->HIT_COUNTER+1)), array('ID'=>$result->ID));
+				if (($this->db->affected_rows() > 0)) {
+					// database not updated
+					// log the error
+					//throw new Exception("Error Incrementing Hit Count");					
+				}
+			}
+			return $result->LONG_URL;
+		} else {
+			return FALSE;
+		}
 	}
 
 }

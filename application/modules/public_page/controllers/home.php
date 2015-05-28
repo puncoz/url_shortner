@@ -34,7 +34,7 @@ class Home extends CI_Controller {
 
 	public function shorten_url() {
 		if ($this->input->is_ajax_request()) {
-			$long_url = trim($this->input->post('long_url'), '/');
+			$long_url = prep_url(trim_slashes($this->input->post('long_url')));
 			try {
 				// checking for blank url
 				if(empty($long_url)) {

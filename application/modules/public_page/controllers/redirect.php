@@ -21,15 +21,26 @@ class Redirect extends CI_Controller {
 		$this->load->model('shorten_model');
 	}
 
-	public function index() {
-		$this->data['page_info'] = array(
-										'title' => 'Nepal\'s First URL shortener',
-										'meta_keywords' => 'url shortner',
-										'meta_description' => 'Nepal\'s One and Only Url Shortner.'
-									);
+	public function index($short_code) {
+		try {
+			if (empty($short_code)) {
+				throw new Exception('Short URL not found!!!');
+			}
 
-		$this->data['page_content'] = $this->load->view('home_page', $this->data, TRUE);
-		$this->load->view('templates/index_page',$this->data);
+			if($this->shorten_model->checkShortCodeFormat($short_code) === FALSE) {
+				throw new Exception('Short URL is in invalid format.');
+			}
+
+			$long_url = $this->shorten_model->getLongUrlFromDB($short_code);
+			if ($long_url == FALSE) {
+				throw new Exception('URL does not exists.');
+			}
+
+			redirect($long_url, 'location', 301);
+
+		} catch (Exception $e) {
+			
+		}
 	}
 	
 } // end of Redirect Class

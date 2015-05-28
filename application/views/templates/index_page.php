@@ -13,6 +13,7 @@
 	<meta name="description" content="<?php echo $page_info['meta_description'] ?>">
 	<meta name="application-name" content="short.url.np">
 	<meta name="author" content="Puncoz Nepal [http://www.puncoz.com]">
+	<meta name="base_url" content="<?php echo base_url() ?>">
 
 	<!-- 
 		FAVICON
@@ -86,6 +87,9 @@
 	<script src="<?php echo base_url() ?>assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<script src="<?php echo base_url() ?>assets/vendor/ie10-viewport-bug-workaround.js"></script>
+	<!-- jQuery Copy -->
+	<script type="text/javascript" src="<?php echo base_url() ?>assets/vendor/jquery.zclip/jquery.zclip.min.js"></script>
+
 	<script src="<?php echo base_url() ?>assets/custom/js/scripts.js"></script>
 
 </body>

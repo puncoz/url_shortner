@@ -34,6 +34,39 @@ body {
 	margin: 10px;
 }
 
+#status_alert_box {
+	margin-top: 25px; 
+	overflow: hidden;
+}
+#status_alert_box .favicon {
+	float: left;
+}
+#status_alert_box .favicon img {
+	height: 150%;
+	width: 150%;
+}
+#status_alert_box code {
+	margin-left: 20px;
+	padding: 5px;
+	display: block;
+}
+#status_alert_box #copy-link {
+	position: absolute;
+	margin-top: -20px;
+	padding: 5px;
+	right: 15px;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	background-color: #E0E0E0;
+	font-size: .8em;
+	font-weight: bold;
+	text-decoration: none;
+	display: none;
+}
+#status_alert_box:hover #copy-link {	
+	display: block;
+}
+
 /*****************************************
  *	FOOTER
  *****************************************/
