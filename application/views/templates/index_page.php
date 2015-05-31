@@ -18,7 +18,7 @@
 	<!-- 
 		FAVICON
 	-->
-	<?php echo link_tag('assets/images/favicon.ico', 'shortcut icon', 'image/ico') ?>
+	<?php echo link_tag('assets/images/favicon.png', 'shortcut icon', 'image/png') ?>
 
 	<!-- 
 		Style Sheets
