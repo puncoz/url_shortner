@@ -4,7 +4,7 @@
 /*
  *	Home Page Controller
  */
-class Home extends CI_Controller {
+class Home extends MX_Controller {
 
 	/*
 	 *	variable to hold data for view

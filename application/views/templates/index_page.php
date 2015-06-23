@@ -5,8 +5,8 @@
 		Basic Site's Information
 	-->
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?php echo $page_info['title'] ?></title>
 	<meta name="robots" content="noindex, nofollow">
 	<meta name="keywords" content="<?php echo $page_info['meta_keywords'] ?>">
@@ -48,7 +48,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<?php echo base_url() ?>" title="Nepal's First URL Shortner">short.URL.np</a>
+				<a class="navbar-brand" href="<?php echo base_url() ?>" title="Nepal's First URL Shortner">URL Shortener</a>
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-right">
@@ -75,7 +75,7 @@
 	<footer>
 		<div class="container">
 			<p class="text-centered">
-				&copy; <?php echo mdate("%Y",time()) ?> <a href="<?php echo base_url() ?>">short.URL.np</a> | Project By <a href="http://www.puncoz.com" target="_blank">Puncoz Nepal</a> | All Right Reserved.
+				&copy; <?php echo mdate("%Y",time()) ?> <a href="<?php echo base_url() ?>">URL Shortener</a> | Project By <a href="http://www.puncoz.com" target="_blank">Puncoz Nepal</a> &amp; <a href="http://pradhanbishal.com.np" target="_blank">Bishal Pradhan</a> | All Right Reserved.
 			</p>
 		</div>
 	</footer>

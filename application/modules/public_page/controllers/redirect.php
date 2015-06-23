@@ -4,7 +4,7 @@
 /*
  *	Redirect Controller
  */
-class Redirect extends CI_Controller {
+class Redirect extends MX_Controller {
 
 	/*
 	 *	variable to hold data for view
